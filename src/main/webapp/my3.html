@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自写vue</title>
+    <style>
+        .page{
+            width: 200px;
+            height: 200px;
+            background: skyblue;
+            display: none;
+        }
+        .active{
+            display: block;
+
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+        .pagec{
+            width: 100vw;
+            height: 100vh;
+            background-color: #efefef;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        .rMenu{
+            /*vm vh百分比*/
+            width: 50vw;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transform: translateX(100vw);
+            background-color: skyblue;
+            transition: transform 2s;
+        }
+        /*acti为false则默认是100vw,true则是50vw*/
+        .acti{
+            transform: translateX(50vw);
+        }
+
+
+    </style>
+    <script src="js/vuejs-2.5.16.js"></script>
+</head>
+<body>
+
+<div id="app">
+
+    <div class="pagec">首页
+        <button type="button" @click="toggleMenu">切换侧边栏</button>
+    </div>
+    <div class="rMenu" :class="{acti:isShow}">侧边栏</div>
+</div>
+
+</body>
+<script>
+    let app = new Vue({
+        el:"#app",
+        data:{
+
+            isShow:false
+
+        },
+        methods:{
+            toggleMenu:function () {
+                this.isShow=!this.isShow;
+            }
+        }
+
+    })
+</script>
+</html>

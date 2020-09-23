@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>表单输入绑定</title>
+    <script src="js/vuejs-2.5.16.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--表单输入值的绑定不是靠value而是靠v-model,且它的值必须写在data-->
+    姓名: <input type="text" name="username" v-model="username" value="" />
+    <p v-if="username=='陈梓翔'"> {{username}}是猪</p>
+    <p v-if="username=='陈惠珊'"> {{username}}是仙女</p>
+    <img src=""  alt="上海鲜花港 - 郁金香" />
+</div>
+<script type="text/javascript">
+    let app=new Vue({
+        el:"#app",
+        data:{
+            username:"小明"
+        }
+    })
+</script>
+</body>
+
+</html>

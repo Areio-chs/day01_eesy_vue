@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自写vue</title>
+    <style>
+        #div {
+            background-color: red;
+            width:300px;
+            height:300px;
+        }
+        #pane{
+            width: 200px;
+            height: 200px;
+            background: skyblue;
+        }
+        #login{
+            background: aquamarine;
+        }
+        #register{
+            background: bisque;
+        }
+    </style>
+    <script src="js/vuejs-2.5.16.js"></script>
+</head>
+<body>
+    <div id="app">
+          {{message}}
+          {{info}}
+        <button v-on:click="fun1('改变')" >有参按钮</button>
+        <!--        @click可代替v-on:click-->
+        <button @click="fun2">无参按钮</button>
+        <div @mouseover="fun3" id="div">
+            <textarea @mouseover="fun4($event)">这是一个文件域,$event是vue的事件</textarea>
+        </div>
+        <hr/>
+        <form @submit.prevent="check" action="http://www.itheima.com" method="post" >
+            <input type="submit" value="提交">
+        </form>
+
+        <h1>用户名：{{username}}</h1>
+        <h3 v-if="isVip">用户类型：VIP</h3>
+        <!-- v-if和else中间不能有其他元素-->
+        <h3 v-else>用户类型：普通用户</h3>
+
+        <hr>
+
+        <h1>用户允许登录时间</h1>
+        <h3 v-if="age>18">24小时</h3>
+        <h3 v-else-if="age>14">8小时</h3>
+        <h3 v-else>4小时</h3>
+        <hr>
+        <!-- if与show的区别，if不显示时：第一次就直接不渲染，如果内容已经显示将其改为不显示，将内容直接从Dom去除-->
+        <!--show:不显示时，就会改为display:none,但是会渲染在dom上。反复需要切换内容则用show-->
+        <div v-show="isShow" id="pane">
+            HelloVue
+        </div>
+        <button @click="showBtn">切换显示内容</button>
+
+
+        <h3 v-show="tab==1">首页</h3>
+        <h3 v-show="tab==2">新闻页</h3>
+        <h3 v-show>个人中心</h3>
+        <button @click="tabChange" data-id="1">首页</button>
+        <button @click="tabChange" data-id="2">新闻</button>
+        <button @click="tabChange" data-id="3">个人</button>
+
+        <hr>
+        <!--        列表-->
+        <h3>明星列表</h3>
+        <ul>
+            <li v-for="item in stars">
+                {{item}}
+            </li>
+        </ul>
+        <h3>学生列表</h3>
+        <ul>
+            <li v-for="item in students">
+                <h4>{{item.studentName}}</h4>
+                <p>年龄：{{item.age}}---学校：{{item.school}}</p>
+            </li>
+        </ul>
+        <h3>学生列表(带索引值)</h3>
+        <ul>
+            <li v-for="item,key in students">
+                <h4>索引值：{{key}}---学生名字:{{item.studentName}}</h4>
+                <p>年龄：{{item.age}}---学校：{{item.school}}</p>
+            </li>
+        </ul>
+        <h3>循环偶数年龄</h3>
+        <ul>
+            <li v-for="item,index in oddStudents">
+                <h4>{{item.studentName}}</h4>
+                <p>年龄：{{item.age}}---学校：{{item.school}}</p>
+            </li>
+        </ul>
+        <h3>循环对象</h3>
+        <ul>
+            <li v-for="item,key in students[0]">
+                key:{{key}},value:{{item}}
+            </li>
+        </ul>
+        <hr>
+        <h1 v-html="htmlTxt"></h1>
+        <div v-text="htmlTxt"></div>
+        <!--相当于v-bind:id 这样login就变成一个变量了,id的内容就可以随便变了-->
+        <div :id="idName">
+            <h1>登陆/注册</h1>
+        </div>
+        <div>
+            <h1>{{firstname+lastname}}</h1>
+            <!--计算属性-->
+            <h1>{{fullName}}</h1>
+        </div>
+
+        <!--事件绑定-->
+        <button @click="changeBg">改变背景</button>
+        <hr>
+        <h1>{{reverseWord}}</h1>
+    </div>
+
+</body>
+<script>
+    let app= new Vue({
+        el:"#app",
+        data:{
+            // 这里面的名字可以自取
+            message:"你好",
+            info:"",
+            username:"小明",
+            isVip:false,
+            age:24,
+            isShow:true,
+            tab: 1,
+            stars:['蔡徐坤',"苏有朋","范冰冰","李晨"],
+            //每一个数组里面都是一个对象
+            students:[
+                {
+                    studentName:"小明",
+                    age:16,
+                    school:"清华"
+                },
+                {
+                    studentName:"小黑",
+                    age:17,
+                    school:"北大"
+                },
+                {
+                    studentName:"小红",
+                    age:18,
+                    school:"浙大"
+                }
+
+            ],
+            htmlTxt:'<h1>Hello Vue</h1>',
+            idName:"login",
+            firstname:"陈",
+            lastname:"晓",
+            word:"music"
+        },
+        methods:{
+            fun1:function (msg) {
+                this.message=msg;
+            },
+            fun2:function () {
+                this.info="信息";
+            },
+            fun3:function () {
+                alert("鼠标悬停在div上了");
+            },
+            fun4:function (event) {
+                alert("鼠标悬停在textarea上了");
+                // 种植传播行为，可以防止悬停在textarea同时也会触发div,等价于@mouseover.stop
+                event.stopPropagation();
+            },
+            check:function () {
+                if (!this.info){
+                    alert("缺少数据");
+                    return false;
+                }else{
+                    alert("有数据");
+                    return true;
+                }
+
+            },
+            showBtn:function () {
+                app.isShow = !app.isShow;
+            },
+            tabChange:function (e) {
+                //console.log(e)
+                let tabid = e.target.dataset.id
+                app.tab = tabid;//等同this.tab=tabid
+
+
+            },
+            changeBg:function () {
+                document.body.style.background = "skyblue";
+
+            }
+        },
+        //计算属性 提高性能时用，可缓存
+        computed:{
+            fullName:function () {
+                //反复修改时用，它会把计算的结果进行缓存
+                return this.firstname+this.lastname
+            },
+            reverseWord:function () {
+                return this.word.split("").reverse().join("")
+            },
+            oddStudents:function () {
+                return this.students.filter((item,i)=>{
+                    return item.age%2==0
+                })
+            }
+        }
+    });
+</script>
+</html>

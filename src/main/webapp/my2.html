@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自写vue</title>
+    <style>
+        .page{
+            width: 200px;
+            height: 200px;
+            background: skyblue;
+            display: none;
+        }
+        .active{
+            display: block;
+
+        }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+
+    </style>
+    <script src="js/vuejs-2.5.16.js"></script>
+</head>
+<body>
+
+<div id="app">
+   {{msg}}
+    <!-- active是属性 isTrue是变量   -->
+    <!--通过对象的方式决定是否存在某个类-->
+    <!--这样两个属性class都会有，只是：class可以动态绑定-->
+    <div class="page" :class="{active:isTrue}"></div>
+    <!--直接放置对象-->
+    <div class="page" :class="styleObj"></div>
+    <!--放置数组-->
+    <div class="page" :class="styleArr"></div>
+    <!--放置字符串-->
+    <div class="page" :class="styleStr"></div>
+    <!--CSS内联样式变量拼接-->
+    <div style="width: 100px;height: 100px; background: skyblue;" :style="{border: borderWidth+'px solid red'}"></div>
+
+
+</div>
+
+</body>
+<script>
+    let app = new Vue({
+        el:"#app",
+        data:{
+            msg:"helloVue",
+            isTrue:true,
+            //在对象有-一定要加引号
+            styleObj:{active:true,laochen:true,"col-lg-6":true},
+            styleArr:['col-xs-12,red-bg'],
+            styleStr:"ab abc",
+            borderWidth:10,
+
+
+        },
+        //监听数据变化,不要用太多
+        watch:{
+            // 传入事件对象
+            msg:function (val) {
+                console.log(val)
+                //可以做任何操作，改变颜色啥的
+                this.msg="改值"
+
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .page{
+            width: 100vw;
+            height: 100vh;
+            background-color: #efefef;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+        .rMenu{
+            width: 50vw;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transform: translateX(50vw);
+            background: skyblue;
+        }
+
+        /*进入和离开的效果*/
+        .slideRight-enter-active,.slideRight-leave-active{
+            transition: all 5s;
+            /*all表示使用所有下面效果*/
+        }
+        /*从哪里进来  出去到哪个地方  从100进来到当前位置 从当前位置出去到100的地方*/
+        .slideRight-enter,.slideRight-leave-to{
+            transform: translateX(100vw);
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="page">
+        首页
+        <button @click="toggleMenu" type="button">切换侧边栏</button>
+    </div>
+    <!--transition用于过度用的，slide表示滑出，它会自动追加style里面以slide开头的效果-->
+    <transition name='slideRight'>
+        <div class="rMenu" v-show="isShow">
+            侧边栏
+        </div>
+    </transition>
+
+</div>
+<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    let app = new Vue({
+        el:"#app",
+        data:{
+            isShow:false
+        },
+        methods:{
+            toggleMenu:function(){
+                this.isShow = !this.isShow;
+            }
+        }
+    })
+</script>
+</body>
+</html>
